@@ -12,12 +12,12 @@ app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(bodyParser.json({ type: "application/vnd.api+json" }));
-app.use(express.static(__dirname + '/app/public'));
+app.use(express.static(__dirname + "./app/public"));
 
 
 //Routes 
- require("./app/routing/apiRoutes.js")(app);
- require("./app/routing/htmlRoutes.js")(app);
+require("./app/routing/apiRoutes.js")(app);
+require("./app/routing/htmlRoutes.js")(app);
 
 //Listener 
 app.listen(PORT, function() {
