@@ -1,21 +1,23 @@
 //Dependencies
 const express = require("express");
 const path = require("path");
+const bodyParser = require("body-parser");
 
 //Express configuration
 const app = express();
-const PORT = 9000;
+const PORT = process.env.PORT || 3000;
 
 //Data Parsing
-app.use(express.urlencoded({ extended: true}));
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.json());
+app.use(bodyParser.text());
+app.use(bodyParser.json({ type: "application/vnd.api+json" }));
+app.use(express.static(__dirname + '/app/public'));
 
 
 //Routes 
-// require("./routes/apiRoutes")(app);
-// require("./routes/html")(app);
-
-app.use("./assets", express.static("assets"));
+ require("./app/routing/apiRoutes.js")(app);
+ require("./app/routing/htmlRoutes.js")(app);
 
 //Listener 
 app.listen(PORT, function() {
