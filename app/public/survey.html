@@ -7,7 +7,7 @@
     <title>Friend Finder</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-    crossorigin="anonymous">
+        crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Antic" rel="stylesheet">
     <link rel="stylesheet" type="text/css" media="screen" href="/app/public/assets/styles.css" />
     <script src="main.js"></script>
@@ -25,11 +25,15 @@
 
                 <form>
                     <h2>About You</h2>
-                    <h3>Name (Required)</h3>
-                    <input type="text" id="name" class="form-control" placeholder="Your name" required>
+                    <div class="form-group">
+                        <label for="name">Name (Required)</label>
+                        <input type="text" id="name" class="form-control" placeholder="Your name" required>
+                    </div>
 
-                    <h3>Link to Photo Image (Required)</h3>
-                    <input type="text" id="photo" class="form-control" placeholder="http://url/img.png" required>
+                    <div class="form-group">
+                        <label for="photo">Link to Photo Image (Required)</label>
+                        <input type="url" id="photo" class="form-control" placeholder="http://url/img.png" required>
+                    </div>
                     <br><br>
 
                     <hr>
@@ -53,11 +57,11 @@
             <div id="results-modal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
 
-                    <!-- Modal content
+                    <!-- Modal content -->
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h2 class="modal-title"><strong>Best Match</strong></h2>
+                            <h2 class="modal-title">Best Match</h2>
                         </div>
                         <div class="modal-body">
                             <h2 id="match-name"></h2>
@@ -67,11 +71,19 @@
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
-                    -->
+
+                    <!-- Result Modal -->
+                    <div id="results" class="modal fade" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 </body>
+
+<!--JQuery CDN-->
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+<script src="./assets/javascript/survey.js"></script>
 
 </html>

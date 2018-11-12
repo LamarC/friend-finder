@@ -26,7 +26,11 @@ module.exports = function (app) {
                 }
 
                 differences.push(totalDifferences);
-            })
+            });
+        
+            let userData = [];
+
+            
         }
     })
 }
