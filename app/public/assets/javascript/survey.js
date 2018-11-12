@@ -1,106 +1,78 @@
-$(document).ready(function) {
-    let questions = [
-        "I'm a great cook",
-        "I like being employed",
-        "I totally know what I'm doing with my life",
-        "I like to workout",
-        "I think I have daddy issues",
-        "I think I have mommy issues",
-        "I am responsible enough to own a pet",
-        "Is cold pizza and soda a good breakfast?",
-        "I'm a good tipper",
-        "I am NOT mentally unstable"
-    ];
+// Chosen CSS
+let config = {
+    ".chosen-select": {},
+    ".chosen-select-deselect": {
+      allow_single_deselect: true
+    },
+    ".chosen-select-no-single": {
+      disable_search_threshold: 10
+    },
+    ".chosen-select-no-results": {
+      no_results_text: "Oops, nothing found!"
+    },
+    ".chosen-select-width": {
+      width: "95%"
+    }
+  };
 
-    let choices = [
-        "1 (Strongly Disagree)",
-        "2 (Disagree)",
-        "3 (Neutral)",
-        "4 (Agree)",
-        "5 (Strongly Agree)"
-    ];
+  for (let selector in config) {
+    $(selector).chosen(config[selector]);
+  }
 
-    let questionsDiv = $("#questions");
+  // Capture the form inputs
+  $("#submit").on("click", function(event) {
+    event.preventDefault();
 
-    // Creates new div for each question
-    questions.forEach(function (question) {
-        i++;
-
-        //Makes a header, each question and the drop down menu for choices
-
-        let item = $("<div class=\"question\">");
-        let headline = $("<h4>").text("Question " + i);
-        let questionText = $("<p>").text(question);
-        let dropDown = $("<div class=\"form-group\">");
-        let select = $("<select class=\"form-control selector\">");
-
-        choices.forEach(function (choice) {
-            let option = $("option").text(choice);
-            select.append(option);
-        });
-
-        select.attr("id", "select" + i);
-        dropDown.append(headline, questionText, dropDown);
-        let br = $("<br>");
-        questionsDiv.append(item, br);
-    });
-
-    //Submit button
-    $("#submit").on("click", function (event) {
-        //Not required but good to prevent reload
-        event.preventDefault();
-
-        let userName = $("#name").val();
-        let userPhoto = $("#photo").val();
-
-        if (userName.lenght && userPhoto.lenght > 0) {
-            let answer = [];
+    // Form validation
+    function validateForm() {
+      var isValid = true;
+      $(".form-control").each(function() {
+        if ($(this).val() === "") {
+          isValid = false;
         }
+      });
 
-        //Adds 
-        Object.keys($(".selector")).forEach(function (keys) {
-            if (answer.lenght < questions.lenght) {
-                answer.push($(".selector")[key].value());
-            }
-        });
+      $(".chosen-select").each(function() {
 
-        let surveyData = {
-            name: userName,
-            photo: userPhoto,
-            answers: answers
-        };
+        if ($(this).val() === "") {
+          isValid = false;
+        }
+      });
+      return isValid;
+    }
 
-        $.post("/api/friends", surveyData, function (data) {
-            if (data) {
-                $(".modal-content").empty("");
-                $("#userName").val("");
-                $("#userPhoto").val("");
+    // If all required fields are filled
+    if (validateForm()) {
+      // Create an object for the user"s data
+      let userData = {
+        name: $("#name").val(),
+        photo: $("#photo").val(),
+        scores: [
+          $("#q1").val(),
+          $("#q2").val(),
+          $("#q3").val(),
+          $("#q4").val(),
+          $("#q5").val(),
+          $("#q6").val(),
+          $("#q7").val(),
+          $("#q8").val(),
+          $("#q9").val(),
+          $("#q10").val()
+        ]
+      };
 
+      // AJAX post the data to the friends API.
+      $.post("/api/friends", userData, function(data) {
 
-                data.forEach(function (profile) {
-                    let profileDiv = $("<div class=\"profile\">");
-                    let name = profile.name;
-                    let photoURL = profile.photo;
-                    let nameHeader = $("<h3>").text(name);
-                    let picture = $("<img>").attr("src", photoURL);
-                    profileDiv.append(nameHeader, picture);
+        // Grab the result from the AJAX post so that the best match's name and photo are displayed.
+        $("#match-name").text(data.name);
+        $("#match-img").attr("src", data.photo);
 
-                    //Displays the results in the modal
-                    $(".modal-content").append(profileDiv);
-                });
+        // Show the modal with the best match
+        $("#results-modal").modal("toggle");
 
-                //In case of multiple matches
-                if (data.lenght > 1) {
-                    //Header is plural
-                    $(".modal-title").text("This are your matches");
-                } else {
-                    //Header is singular
-                    $(".modal-title").text("Your perfet match");
-                }
-
-                //Displays the result modal
-                $("#results").modal();
-            }
-        });
-    });
-}
+      });
+    } else {
+      alert("Please fill out all fields before submitting!");
+    }
+  });
