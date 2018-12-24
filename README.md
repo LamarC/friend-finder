@@ -1,7 +1,8 @@
 # Friend finder
+ 
+> :couple_with_heart: This dating application will find you the perfect date. Just take the personality test and let us work our magic! 
 
->This datng application will find you the perfect date, just take the personality test and lets us work our magic ![hat]()
-_Take the survey so we can find your perfect match!!_
+ _Take the survey so we can find your a great match!!_
 
 ## Technologies used 
 
@@ -18,4 +19,3 @@ _Take the survey so we can find your perfect match!!_
 ## Deployment 
 
 * `npm init`
-* 
