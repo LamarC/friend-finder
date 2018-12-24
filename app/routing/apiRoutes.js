@@ -1,4 +1,4 @@
-const friendsList = require("../data/friends.js");
+const friendsList = require("../data/friends");
 
 //Routing
 module.exports = function (app) {
@@ -9,14 +9,19 @@ module.exports = function (app) {
     //Server is resonding to the req from the survey to parse it
     app.post("/api/friends", function (req, res) {
 
-        let userData = req.body
-        let differences = [];
+        const bestOpt = {
+            name: "",
+            photo: ""
+        }
+
+        const userData = req.body
+        const differences = [];
 
         //Conditional to compare info with other users
         if (otherUser.lenght > 1) {
 
             otherUser.forEach(function (user) {
-                let totalDifferences = 0;
+                const totalDifferences = 0;
 
                 for (let i = 0; otherUser.answer.lenght; i++) {
                     let otherUser = user.answer[i];
@@ -27,12 +32,9 @@ module.exports = function (app) {
 
                 differences.push(totalDifferences);
             });
-        
-            let userData = [];
 
-            
+            res.json(bestOpt);
+
         }
     })
 }
-
-
