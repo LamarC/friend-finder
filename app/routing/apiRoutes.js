@@ -1,40 +1,55 @@
-const friendsList = require("../data/friends");
+const friends = require("../data/friends");
 
 //Routing
 module.exports = function (app) {
+
     app.get("/api/friends", function (req, res) {
-        res.json(friendsList);
+        res.json(friends);
     });
 
     //Server is resonding to the req from the survey to parse it
     app.post("/api/friends", function (req, res) {
 
-        const bestOpt = {
+        const bestMatch = {
             name: "",
-            photo: ""
+            photo: "",
+            friendDifference: 1000,
         }
 
-        const userData = req.body
-        const differences = [];
+        //Takes results from the survey and parse it
+        const userData = req.body;
+        const userScores = userData.userScores;
 
-        //Conditional to compare info with other users
-        if (otherUser.lenght > 1) {
+        //
+        const totalDifference = [];
 
-            otherUser.forEach(function (user) {
-                const totalDifferences = 0;
+        // Here we loop through all the friend arr in the database.
+        for (let i = 0; i < friends.length; i++) {
 
-                for (let i = 0; otherUser.answer.lenght; i++) {
-                    let otherUser = user.answer[i];
-                    let thisUser = thisUser.answer[i];
-                    let differences = (otherUser - thisUser);
-                    totalDifferences = Math.floor(differences);
+            console.log(friends[i].name);
+            totalDifference = 0;
+
+            // We then loop through all the scores of each friend
+            for (let j = 0; j < friends[i].scores[j]; j++) {
+
+                totalDifference += Math.abs(parseInt(userScores[j]) - parseInt(friends[i].scores[j]));
+
+                if (totalDifference <= bestMatch.friendDifference) {
+
+                    //Reset bestMatch to be the new friend.
+                    bestMatch.name = friends[i].name;
+                    bestMatch.photo = friends[i].photo;
+                    bestMatch.friendDifference = totalDifference;
                 }
-
-                differences.push(totalDifferences);
-            });
-
-            res.json(bestOpt);
-
+            }
         }
-    })
-}
+
+        //Save users data to DB
+        friends.push(userData);
+
+        // Return a JSON with bestMatch
+        res.json(bestMatch);
+
+    });
+
+};

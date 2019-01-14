@@ -5,11 +5,13 @@ const bodyParser = require("body-parser");
 
 //Express configuration
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 //Data Parsing
-app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.text());
+
 app.use(express.static(__dirname + "./app/public"));
 
 
