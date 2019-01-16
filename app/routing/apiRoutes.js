@@ -1,55 +1,52 @@
 const friends = require("../data/friends");
 
 //Routing
-module.exports = function (app) {
+module.exports = function(app) {
+  app.get("/api/friends", function(req, res) {
+    res.json(friends);
+  });
 
-    app.get("/api/friends", function (req, res) {
-        res.json(friends);
-    });
+  //Server is resonding to the req from the survey to parse it
+  app.post("/api/friends", function(req, res) {
+    let bestMatch = {
+      name: "",
+      photo: "",
+      totalDifference: 1000
+    };
 
-    //Server is resonding to the req from the survey to parse it
-    app.post("/api/friends", function (req, res) {
+    //Takes results from the survey and parse it
+    const userInput = req.body;
+    const userScores = userData.scrs;
 
-        const bestMatch = {
-            name: "",
-            photo: "",
-            friendDifference: 1000,
+    //Empty arr will compare difference btwn userInput and info in the DB
+    let totalDifference = [];
+
+    // Here we loop through all the friends arr in the DB.
+    for (let i = 0; i < friends.length; i++) {
+      let theFriend = friends[i];
+      console.log(friends[i].name);
+      totalDifference = 0;
+
+      // We loop through scores of friends
+      for (let j = 0; j < theFriend[i].scrs[j]; j++) {
+        let theFriend = theFriend.scrs[j];
+        totalDifference += Math.abs(
+          parseInt(userScores[j]) - parseInt(theFriend[i].scrs[j])
+        );
+
+        if (totalDifference <= bestMatch.friendDifference) {
+          //Reset bestMatch to be the new friend.
+          bestMatch.name = theFriend[i].name;
+          bestMatch.photo = theFriend[i].photo;
+          bestMatch.friendDifference = totalDifference;
         }
+      }
+    }
 
-        //Takes results from the survey and parse it
-        const userData = req.body;
-        const userScores = userData.userScores;
+    //Save users data to DB
+    friends.push(userInput);
 
-        //
-        const totalDifference = [];
-
-        // Here we loop through all the friend arr in the database.
-        for (let i = 0; i < friends.length; i++) {
-
-            console.log(friends[i].name);
-            totalDifference = 0;
-
-            // We then loop through all the scores of each friend
-            for (let j = 0; j < friends[i].scores[j]; j++) {
-
-                totalDifference += Math.abs(parseInt(userScores[j]) - parseInt(friends[i].scores[j]));
-
-                if (totalDifference <= bestMatch.friendDifference) {
-
-                    //Reset bestMatch to be the new friend.
-                    bestMatch.name = friends[i].name;
-                    bestMatch.photo = friends[i].photo;
-                    bestMatch.friendDifference = totalDifference;
-                }
-            }
-        }
-
-        //Save users data to DB
-        friends.push(userData);
-
-        // Return a JSON with bestMatch
-        res.json(bestMatch);
-
-    });
-
+    // Return a JSON with bestMatch
+    res.json(bestMatch);
+  });
 };
