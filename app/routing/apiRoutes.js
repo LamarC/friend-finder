@@ -19,7 +19,7 @@ module.exports = function(app) {
     const userScores = userData.scrs;
 
     //Empty arr will compare difference btwn userInput and info in the DB
-    let totalDifference = [];
+    let totalDifference;
 
     // Here we loop through all the friends arr in the DB.
     for (let i = 0; i < friends.length; i++) {
